@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:musicplayer/screens/Nowplaying.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -36,7 +40,17 @@ class _AllSongsState extends State<AllSongs> {
     Permission.storage.request();
   }
 
+  final AudioPlayer _audioPlayer = AudioPlayer();
   final _audioQuery = new OnAudioQuery();
+  playSong(String? uri) {
+    try {
+      _audioPlayer.setAudioSource(AudioSource.uri(Uri.parse(uri!)));
+      _audioPlayer.play();
+    } on Exception {
+      log("Error parsing song");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,13 +82,24 @@ class _AllSongsState extends State<AllSongs> {
               );
             }
             return ListView.builder(
-              itemBuilder: ((context, index) => ListTile(
-                    leading: Icon(Icons.music_note),
-                    title: Text(item.data![index].displayName),
-                    subtitle: Text("${item.data![index].artist}"),
-                    trailing: Icon(Icons.more_horiz),
-                  )),
               itemCount: item.data!.length,
+              itemBuilder: ((context, index) {
+                return ListTile(
+                  leading: Icon(Icons.music_note),
+                  title: Text(item.data![index].displayNameWOExt),
+                  subtitle: Text("${item.data![index].artist}"),
+                  trailing: Icon(Icons.more_horiz),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NowPlaying(
+                            songModel: item.data![index],
+                          ),
+                        ));
+                  },
+                );
+              }),
             );
           }),
     );
