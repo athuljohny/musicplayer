@@ -70,11 +70,11 @@ class _AllSongsState extends State<AllSongs> {
             return ListView.builder(
               itemBuilder: ((context, index) => ListTile(
                     leading: Icon(Icons.music_note),
-                    title: Text(item.data![index].displayNameWOExt),
+                    title: Text(item.data![index].displayName),
                     subtitle: Text("${item.data![index].artist}"),
                     trailing: Icon(Icons.more_horiz),
                   )),
-              itemCount: 100,
+              itemCount: item.data!.length,
             );
           }),
     );
