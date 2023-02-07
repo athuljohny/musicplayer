@@ -85,7 +85,9 @@ class _AllSongsState extends State<AllSongs> {
               itemCount: item.data!.length,
               itemBuilder: ((context, index) {
                 return ListTile(
-                  leading: Icon(Icons.music_note),
+                  leading: CircleAvatar(
+                    child: Icon(Icons.music_note),
+                  ),
                   title: Text(item.data![index].displayNameWOExt),
                   subtitle: Text("${item.data![index].artist}"),
                   trailing: Icon(Icons.more_horiz),
@@ -95,6 +97,7 @@ class _AllSongsState extends State<AllSongs> {
                         MaterialPageRoute(
                           builder: (context) => NowPlaying(
                             songModel: item.data![index],
+                            audioPlayer: _audioPlayer,
                           ),
                         ));
                   },
